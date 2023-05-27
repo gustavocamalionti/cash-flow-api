@@ -58,12 +58,11 @@ abstract class BaseRepository implements RepositoryInterface
         return $this->entity->find($id)->delete();
     }
 
-
     /**
      * implements relationship. Query is building in entity.
      */
     public function displayRelationship($attributes){
-        $this->model = $this->model->with($attributes);
+        $this->entity = $this->entity->with($attributes);
        
     }
 
@@ -92,14 +91,6 @@ abstract class BaseRepository implements RepositoryInterface
     public function selectAttributes($attributes)
     {
         $this->entity = $this->entity->selectRaw($attributes);
-    }
-
-    /**
-     *  Get definitive results. With the assembled query resulting from other methods such as 'filter' and 'selectAttributes'.
-     */
-    public function getResults()
-    {
-        return $this->entity->get();
     }
 
     public function beginTransaction(): void
