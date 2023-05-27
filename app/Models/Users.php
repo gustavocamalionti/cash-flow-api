@@ -22,7 +22,6 @@ class Users extends Authenticatable
         'email',
         'document',
         'balance',
-        'user_types_id',
         'password'
     ];
 

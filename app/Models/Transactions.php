@@ -17,4 +17,14 @@ class Transactions extends Model
         'amount',
         'status_id'
     ];
+
+    public function send_user()
+    {
+        return $this->belongsTo(User::class, 'sender_user_id');
+    }
+
+    public function receiver_user()
+    {
+        return $this->belongsTo(User::class, 'receiver_user_id');
+    }
 }
