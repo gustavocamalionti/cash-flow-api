@@ -4,7 +4,7 @@ namespace App\Repositories;
 
 use App\Models\Users;
 
-class UsersRepository extends BaseRepository
+class UserRepository extends BaseRepository
 {
     public function entity()
     {

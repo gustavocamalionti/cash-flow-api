@@ -4,7 +4,7 @@ namespace App\Repositories;
 
 use App\Models\Transactions;
 
-class TransactionsRepository extends BaseRepository
+class TransactionRepository extends BaseRepository
 {
     public function entity()
     {

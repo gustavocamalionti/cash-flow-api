@@ -58,6 +58,15 @@ abstract class BaseRepository implements RepositoryInterface
         return $this->entity->find($id)->delete();
     }
 
+
+    /**
+     * implements relationship. Query is building in entity.
+     */
+    public function displayRelationship($attributes){
+        $this->model = $this->model->with($attributes);
+       
+    }
+
     /**
      * Add condition in select. Query is building in entity.
      */
