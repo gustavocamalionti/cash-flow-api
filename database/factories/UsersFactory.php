@@ -21,7 +21,6 @@ class UsersFactory extends Factory
         $first_name = strval(fake('pt_BR')->firstName($gender));
         $last_name = strval(fake('pt_BR')->lastName());
 
-
         $p1username = fake()->randomElement([ Str::slug($first_name), Str::slug(($last_name))]);
         $p2username = fake()->randomElement([ Str::slug($first_name), Str::slug($last_name), random_int(0, 9999), fake()->year('now'), '.', '-', '_', '.', '-', '_', '.', '-', '_', '.', '-', '_', '.', '-', '_', '.', '-', '_', '.', '-', '_', '.', '-', '_']);
         $p3username = fake()->randomElement([ Str::slug($first_name), Str::slug($last_name), random_int(0, 99), fake()->year('now')]);

@@ -25,4 +25,3 @@ Route::prefix('v1')->group(function () {
         Route::get('/save', [App\Http\Controllers\TransactionsController::class, 'save'])->name('transaction.make');
     });
 });
-
