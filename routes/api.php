@@ -14,11 +14,15 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-// Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-//     return $request->user();
-// });
-
-
-Route::get('/', function () {
-    return ['Chegamos até aqui' => 'SIM'];
+Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+    return $request->user();
 });
+
+Route::prefix('v1')->group(function () {
+    Route::apiresource('users', 'App\Http\Controllers\UsersController');
+
+    Route::prefix('transactions')->group(function () {
+        Route::get('/save', [App\Http\Controllers\TransactionsController::class, 'save'])->name('transaction.make');
+    });
+});
+

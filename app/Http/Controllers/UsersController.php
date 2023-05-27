@@ -8,6 +8,13 @@ use App\Models\Users;
 
 class UsersController extends Controller
 {
+    /**
+     * Display a listing of the resource.
+     */
+    public function index()
+    {
+        //
+    }
 
     /**
      * Store a newly created resource in storage.

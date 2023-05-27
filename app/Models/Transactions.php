@@ -18,12 +18,12 @@ class Transactions extends Model
         'status_id'
     ];
 
-    public function send_user()
+    public function sendUser()
     {
         return $this->belongsTo(User::class, 'sender_user_id');
     }
 
-    public function receiver_user()
+    public function receiverUser()
     {
         return $this->belongsTo(User::class, 'receiver_user_id');
     }
