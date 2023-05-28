@@ -20,10 +20,10 @@ class UsersController extends Controller
      * Display a listing of the resource.
      */
     public function index(Request $request)
-    {
+    {   
         try {
-            $this->userService->QueryApplyFilters($request);
-            $this->userService->QuerySelectAttributesEspecific($request);
+            $this->userService->QueryApplyFilters($request->all());
+            $this->userService->QuerySelectAttributesEspecific($request->all());
             $response = $this->userService->getRecords();
 
             //Query is building in entity.
@@ -56,7 +56,7 @@ class UsersController extends Controller
     public function store(StoreUsersRequest $request)
     {
         try {
-            $response = $this->userService->save($request);
+            $response = $this->userService->save($request->all());
 
             return response()->json([
                 'msg' => 'Criado com sucesso',
@@ -135,7 +135,7 @@ class UsersController extends Controller
 
             /* If there is an id in the body of the request, eloquent has the intelligence to update (UPDATE) the
             record, otherwise insert(INSERT), respecting the RESTFul*/
-            $user = $this->userService->update($request, $id);
+            $user = $this->userService->update($request->all(), $id);
 
             return response()->json([
                 'msg' => 'Feature updated successfully.',

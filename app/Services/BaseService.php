@@ -12,7 +12,7 @@ class BaseService implements ServiceInterface
 
     public function save($data)
     {
-        return $this->modelRepository->save($data->all());
+        return $this->modelRepository->save($data);
     }
 
     public function find($id)
@@ -22,7 +22,7 @@ class BaseService implements ServiceInterface
 
     public function update($data, $id)
     {
-        return $this->modelRepository->update($id, $data->all(), true);
+        return $this->modelRepository->update($id, $data, true);
     }
 
     public function delete($id)
