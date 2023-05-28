@@ -61,7 +61,7 @@ class TransactionService extends BaseService
         };
     }
 
-    
+
 
     public function addTransactionJobToQueue($data)
     {
@@ -71,7 +71,7 @@ class TransactionService extends BaseService
             return response()->json([
                 'msg' => 'transaction denied.',
             ], 403);
-        }; 
+        };
 
         Bus::batch([
             new TransactionJob($data),
@@ -80,7 +80,6 @@ class TransactionService extends BaseService
             // All jobs completed successfully...
 
             $this->addEmailSendsJobToQueue();
-            
         })->catch(function (Batch $batch, Throwable $e) {
             return response()->json([
                 'msg' => 'An error occurred with the transaction. All balances were reverted to their respective accounts.',
@@ -92,10 +91,41 @@ class TransactionService extends BaseService
         return 'The transaction is being processed.';
     }
 
-    public function executeTransaction()
+    public function executeTransaction($data)
     {
+
+        //create transaction with status processing
+        $data['status_id'] = 1;
+        $transaction = $this->modelRepository->save($data);
+
         $this->modelRepository->beginTransaction();
-        $this->modelRepository->rollBackTransaction();
+        // throw new Exception("Error Processing Request", 1);
+
+
+
+        try {
+            $payerUser = $this->userRepository->findbyId($data['sender_user_id']);
+            $receivedUser = $this->userRepository->findbyId($data['receiver_user_id']);
+
+            $balancePayer = $payerUser->balance - $data['amount'];
+
+            $balanceReceived = $receivedUser->balance + $data['amount'];
+
+
+            Log::info($payerUser->id . ' ' . $receivedUser->id . ' ' . $transaction->id);
+            $this->userRepository->update($payerUser->id, ['balance' => $balancePayer]);
+            Log::info($payerUser->id . ' ' . $receivedUser->id . ' ' . $transaction->id);
+            $this->userRepository->update($receivedUser->id, ['balance' => $balanceReceived]);
+            Log::info($payerUser->id . ' ' . $receivedUser->id . ' ' . $transaction->id);
+
+            //set status to success in transaction
+            $this->modelRepository->update($transaction->id, ['status_id' => 2]);
+            Log::info($payerUser->id . ' ' . $receivedUser->id . ' ' . $transaction->id);
+        } catch (\Throwable $th) {
+            $this->modelRepository->rollBackTransaction();
+        }
+
+
         $this->modelRepository->commitTransaction();
     }
 
@@ -104,5 +134,4 @@ class TransactionService extends BaseService
         SendEmailToPayerJob::dispatch($this->data);
         SendEmailToReceivedJob::dispatch($this->data);
     }
-
 }
