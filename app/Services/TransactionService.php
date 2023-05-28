@@ -18,7 +18,7 @@ class TransactionService extends BaseService
 {
     protected $modelRepository;
     protected $userRepository;
-
+    protected $data;
     public function __construct(
         TransactionRepository $modelRepository,
         UserRepository $userRepository
@@ -54,15 +54,16 @@ class TransactionService extends BaseService
     {
         $response = Http::accept('application/json')->get('https://run.mocky.io/v3/8fafdd68-a090-496f-8c9a-3442cf30dae6')->json();
 
-        if ($response['message'] == 'nAutorizado') {
+        if ($response['message'] == 'Autorizado') {
             return true;
         } else {
             return false;
         };
     }
 
-    public function chainedQueuesTransactionSendingEmails($data)
+    public function addTransactionJobToQueue($data)
     {
+        $this->data = $data;
         $TransactionAuthorized = $this->getAuthorization();
         if ($TransactionAuthorized == false) {
             return response()->json([
@@ -70,11 +71,19 @@ class TransactionService extends BaseService
             ], 403);
         };
 
-        Bus::chain([
+        Bus::batch([
             new TransactionJob($data),
-            new SendEmailToPayerJob($data),
-            new SendEmailToReceivedJob($data),
-        ])->dispatch();
+
+        ])->then(function (Batch $batch) {
+            // All jobs completed successfully...
+        })->catch(function (Batch $batch, Throwable $e) {
+            return response()->json([
+                'msg' => 'An error occurred with the transaction. All balances were reverted to their respective accounts.',
+            ], 403);
+        })->then(function (Batch $batch) {
+            // The batch has finished executing...
+            $this->addEmailSendsJobToQueue();
+        })->dispatch();
 
         return 'The transaction is being processed.';
     }
@@ -82,13 +91,14 @@ class TransactionService extends BaseService
     public function executeTransaction()
     {
         $this->modelRepository->beginTransaction();
-
-        //
-
         $this->modelRepository->rollBackTransaction();
-
         $this->modelRepository->commitTransaction();
     }
 
+    public function addEmailSendsJobToQueue()
+    {
+        SendEmailToPayerJob::dispatch($this->data);
+        SendEmailToReceivedJob::dispatch($this->data);
+    }
 
 }

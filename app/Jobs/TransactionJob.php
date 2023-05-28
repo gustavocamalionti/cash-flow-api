@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use Exception;
 use Illuminate\Bus\Batchable;
 use Illuminate\Bus\Queueable;
 use App\Services\TransactionService;
@@ -34,7 +35,7 @@ class TransactionJob implements ShouldQueue
     public function handle(): void
     {
         $this->transactionService->executeTransaction($this->data);
-        
+        // throw new Exception("Error Processing Request", 1);  
     }
 
 
