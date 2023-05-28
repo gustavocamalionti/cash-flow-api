@@ -14,7 +14,7 @@ class SendEmailToReceivedJob implements ShouldQueue
 {
     use Batchable, Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
     
-    public $tries = 3;
+    public $tries = 5;
     protected $data;
 
     /**
