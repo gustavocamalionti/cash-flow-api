@@ -61,6 +61,8 @@ class TransactionService extends BaseService
         };
     }
 
+    
+
     public function addTransactionJobToQueue($data)
     {
         $this->data = $data;
@@ -76,6 +78,7 @@ class TransactionService extends BaseService
 
         ])->then(function (Batch $batch) {
             // All jobs completed successfully...
+
             $this->addEmailSendsJobToQueue();
             
         })->catch(function (Batch $batch, Throwable $e) {
