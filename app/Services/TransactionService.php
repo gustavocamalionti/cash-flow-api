@@ -2,9 +2,14 @@
 
 namespace App\Services;
 
-use App\Jobs\SendEmailToPayerJob;
-use App\Jobs\SendEmailToReceivedJob;
+use Exception;
+use Throwable;
+use Illuminate\Bus\Batch;
 use App\Jobs\TransactionJob;
+use App\Jobs\SendEmailToPayerJob;
+use Illuminate\Support\Facades\Bus;
+use Illuminate\Support\Facades\Log;
+use App\Jobs\SendEmailToReceivedJob;
 use App\Repositories\UserRepository;
 use Illuminate\Support\Facades\Http;
 use App\Repositories\TransactionRepository;
@@ -49,31 +54,41 @@ class TransactionService extends BaseService
     {
         $response = Http::accept('application/json')->get('https://run.mocky.io/v3/8fafdd68-a090-496f-8c9a-3442cf30dae6')->json();
 
-        if ($response['message'] == 'Autorizado') {
+        if ($response['message'] == 'nAutorizado') {
             return true;
         } else {
             return false;
         };
     }
 
-    public function addJobTransactionToQueue($data)
+    public function chainedQueuesTransactionSendingEmails($data)
     {
-        TransactionJob::dispatch($data, $this->modelRepository, $this->userRepository);
+        $TransactionAuthorized = $this->getAuthorization();
+        if ($TransactionAuthorized == false) {
+            return response()->json([
+                'msg' => 'transaction denied.',
+            ], 403);
+        };
 
-        return 'The transaction is being processed';
+        Bus::chain([
+            new TransactionJob($data),
+            new SendEmailToPayerJob($data),
+            new SendEmailToReceivedJob($data),
+        ])->dispatch();
+
+        return 'The transaction is being processed.';
     }
 
-    public function addJobsendEmailToPayer($data)
+    public function executeTransaction()
     {
-        SendEmailToPayerJob::dispatch($data, $this->modelRepository, $this->userRepository);
+        $this->modelRepository->beginTransaction();
 
-        return 'The email to payer is being processed';
+        //
+
+        $this->modelRepository->rollBackTransaction();
+
+        $this->modelRepository->commitTransaction();
     }
 
-    public function addJobsendEmailToReceived($data)
-    {
-        SendEmailToReceivedJob::dispatch($data, $this->modelRepository,  $this->userRepository);
 
-        return 'The email to received is being processed';
-    }
 }

@@ -2,31 +2,30 @@
 
 namespace App\Jobs;
 
+use Illuminate\Bus\Batchable;
 use Illuminate\Bus\Queueable;
-use App\Repositories\UserRepository;
+use App\Services\TransactionService;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use App\Repositories\TransactionRepository;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
-use Illuminate\Contracts\Queue\ShouldBeUnique;
 
 class TransactionJob implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
-    
-    public $tries = 3;
+    use Batchable, Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+
+    public $tries = 1;
     protected $data;
-    protected $modelRepository;
-    protected $userRepository;
+    protected $transactionService;
+
     /**
      * Create a new job instance.
      */
-    public function __construct($data, TransactionRepository $modelRepository, UserRepository $userRepository)
+    public function __construct($data)
     {
         $this->data = $data;
-        $this->modelRepository = $modelRepository;
-        $this->userRepository = $userRepository;
+        $this->transactionService = $this->injectTransactionService();
     }
 
     /**
@@ -34,11 +33,13 @@ class TransactionJob implements ShouldQueue
      */
     public function handle(): void
     {
-        $this->modelRepository->beginTransaction();
-        $this->modelRepository->save([
-           
-    ]);
-        $this->modelRepository->rollBackTransaction();
-        $this->modelRepository->commitTransaction();
+        $this->transactionService->executeTransaction($this->data);
+        
+    }
+
+
+    public function injectTransactionService()
+    {
+        return resolve(TransactionService::class);
     }
 }

@@ -18,18 +18,9 @@ class TransactionsController extends Controller
     public function makeTransaction(TransactionsRequest $request)
     {
         try {
-            $TransactionAuthorized = $this->transactionService->getAuthorization();
-            if ($TransactionAuthorized == false) {
-                return response()->json([
-                    'msg' => 'Erro',
-                    'data' => [
-                        'message' => 'Não Autorizado'
-                    ]
-                ], 403);
-            };
-            $response = $this->transactionService->addJobTransactionToQueue($request->all());
-            $this->transactionService->addJobsendEmailToPayer($request->all());
-            $this->transactionService->addJobsendEmailToReceived($request->all());
+            
+            $response = $this->transactionService->chainedQueuesTransactionSendingEmails($request->all());
+            
 
             return response()->json([
                 'msg' => $response
