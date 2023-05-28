@@ -38,7 +38,6 @@ abstract class BaseRepository implements RepositoryInterface
         return $this->entity->find($id);
     }
 
-
     public function save(array $data)
     {
         return $this->entity->create($data);
