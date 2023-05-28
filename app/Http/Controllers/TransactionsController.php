@@ -28,8 +28,8 @@ class TransactionsController extends Controller
                 ], 403);
             };
             $response = $this->transactionService->addJobTransactionToQueue($request->all());
-            $this->transactionService->sendEmailToPayer($request->all());
-            $this->transactionService->sendEmailToReceived($request->all());
+            $this->transactionService->addJobsendEmailToPayer($request->all());
+            $this->transactionService->addJobsendEmailToReceived($request->all());
 
             return response()->json([
                 'msg' => $response

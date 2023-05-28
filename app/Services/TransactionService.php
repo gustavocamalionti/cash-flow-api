@@ -2,6 +2,9 @@
 
 namespace App\Services;
 
+use App\Jobs\SendEmailToPayerJob;
+use App\Jobs\SendEmailToReceivedJob;
+use App\Jobs\TransactionJob;
 use App\Repositories\UserRepository;
 use Illuminate\Support\Facades\Http;
 use App\Repositories\TransactionRepository;
@@ -41,21 +44,6 @@ class TransactionService extends BaseService
        return $user->balance;
     }
 
-    public function addJobTransactionToQueue($data){
-
-        // $this->dispatch(generateTransaction());
-
-        return 'The transaction is being processed';
-
-    }
-
-    public function generateTransaction(){
-
-        $this->modelRepository->beginTransaction();
-        $this->modelRepository->rollBackTransaction();
-        $this->modelRepository->commitTransaction();
-    }
-
     public function getAuthorization(){
         $response = Http::accept('application/json')->get('https://run.mocky.io/v3/8fafdd68-a090-496f-8c9a-3442cf30dae6')->json();
 
@@ -64,14 +52,23 @@ class TransactionService extends BaseService
         } else {
             return false;
         };
-       
     }
 
-    public function sendEmailToPayer($data) {
-        
-    
-    }
-    public function sendEmailToReceived($data) {
+    public function addJobTransactionToQueue($data){
+        TransactionJob::dispatch($data);
 
+        return 'The transaction is being processed';
+    }
+
+    public function addJobsendEmailToPayer($data) {
+        SendEmailToPayerJob::dispatch($data);
+
+        return 'The email to payer is being processed';
+    }
+
+    public function addJobsendEmailToReceived($data) {
+        SendEmailToReceivedJob::dispatch($data);
+
+        return 'The email to received is being processed';
     }
 }
