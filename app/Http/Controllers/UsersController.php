@@ -1,8 +1,6 @@
 <?php
 
 namespace App\Http\Controllers;
-
-use App\Models\Users;
 use Illuminate\Http\Request;
 use App\Services\UserService;
 use Illuminate\Database\QueryException;
@@ -13,7 +11,8 @@ class UsersController extends Controller
 {
 
     protected $userService;
-    public function __construct(UserService $userService) {
+    public function __construct(UserService $userService)
+    {
         $this->userService = $userService;
     }
 
@@ -32,7 +31,6 @@ class UsersController extends Controller
                 'msg' => 'success.',
                 'data' => $response
             ], 200);
-
         } catch (QueryException $e) {
             return response()->json([
                 'msg' => 'Erro',
@@ -40,8 +38,7 @@ class UsersController extends Controller
                     'code' => $e->getCode(),
                     'message' => $e->getMessage()
                 ]
-            ], 404);
-
+            ], 500);
         } catch (\Exception $e) {
             return response()->json([
                 'msg' => 'Erro',
@@ -49,7 +46,7 @@ class UsersController extends Controller
                     'code' => $e->getCode(),
                     'message' => $e->getMessage()
                 ]
-            ], 404);
+            ], 500);
         }
     }
 
@@ -59,13 +56,12 @@ class UsersController extends Controller
     public function store(StoreUsersRequest $request)
     {
         try {
-            $response = $this->userService->saveUser($request);
+            $response = $this->userService->save($request);
 
             return response()->json([
                 'msg' => 'Criado com sucesso',
                 'data' => $response
             ], 201);
-
         } catch (QueryException $e) {
             return response()->json([
                 'msg' => 'Erro',
@@ -73,8 +69,7 @@ class UsersController extends Controller
                     'code' => $e->getCode(),
                     'message' => $e->getMessage()
                 ]
-            ], 404);
-
+            ], 500);
         } catch (\Exception $e) {
             return response()->json([
                 'msg' => 'Erro',
@@ -82,7 +77,7 @@ class UsersController extends Controller
                     'code' => $e->getCode(),
                     'message' => $e->getMessage()
                 ]
-            ], 404);  
+            ], 500);
         }
     }
 
@@ -92,7 +87,7 @@ class UsersController extends Controller
     public function show($id)
     {
         try {
-            $response = $this->userService->findUser($id);
+            $response = $this->userService->find($id);
 
             if ($response == null) {
                 return response()->json(
@@ -106,7 +101,6 @@ class UsersController extends Controller
                 'msg' => 'success.',
                 'data' => $response
             ], 200);
-
         } catch (QueryException $e) {
             return response()->json([
                 'msg' => 'Erro',
@@ -114,8 +108,7 @@ class UsersController extends Controller
                     'code' => $e->getCode(),
                     'message' => $e->getMessage()
                 ]
-            ], 404);
-
+            ], 500);
         } catch (\Exception $e) {
             return response()->json([
                 'msg' => 'Erro',
@@ -123,7 +116,7 @@ class UsersController extends Controller
                     'code' => $e->getCode(),
                     'message' => $e->getMessage()
                 ]
-            ], 404);
+            ], 500);
         }
     }
 
@@ -133,7 +126,7 @@ class UsersController extends Controller
     public function update(UpdateUsersRequest $request, $id)
     {
         try {
-            $user = $this->userService->findUser($id);
+            $user = $this->userService->find($id);
             if ($user == null) {
                 return response()->json([
                     'msg' => 'Unable to perform the update. The requested resource does not exist.'
@@ -142,7 +135,7 @@ class UsersController extends Controller
 
             /* If there is an id in the body of the request, eloquent has the intelligence to update (UPDATE) the
             record, otherwise insert(INSERT), respecting the RESTFul*/
-            $user = $this->userService->updateUser($request, $id);
+            $user = $this->userService->update($request, $id);
 
             return response()->json([
                 'msg' => 'Feature updated successfully.',
@@ -155,8 +148,7 @@ class UsersController extends Controller
                     'code' => $e->getCode(),
                     'message' => $e->getMessage()
                 ]
-            ], 404);
-
+            ], 500);
         } catch (\Exception $e) {
             return response()->json([
                 'msg' => 'Erro',
@@ -164,7 +156,7 @@ class UsersController extends Controller
                     'code' => $e->getCode(),
                     'message' => $e->getMessage()
                 ]
-            ], 404);
+            ], 500);
         }
     }
 
@@ -174,7 +166,7 @@ class UsersController extends Controller
     public function destroy($id)
     {
         try {
-            $user = $this->userService->findUser($id);
+            $user = $this->userService->find($id);
 
             if ($user == null) {
                 return response()->json([
@@ -182,7 +174,7 @@ class UsersController extends Controller
                 ], 404);
             }
 
-            $user = $this->userService->deleteUser($id);
+            $user = $this->userService->delete($id);
 
             return response()->json([
                 'msg' => 'The feature has been successfully removed!'
@@ -194,8 +186,7 @@ class UsersController extends Controller
                     'code' => $e->getCode(),
                     'message' => $e->getMessage()
                 ]
-            ], 404);
-
+            ], 500);
         } catch (\Exception $e) {
             return response()->json([
                 'msg' => 'Erro',
@@ -203,7 +194,7 @@ class UsersController extends Controller
                     'code' => $e->getCode(),
                     'message' => $e->getMessage()
                 ]
-            ], 404);
+            ], 500);
         }
     }
 }

@@ -28,9 +28,10 @@ class UpdateUsersRequest extends FormRequest
 
     public function messages(){
         return [
+            'required' => 'The field is required.',
             'min' => 'The minimum value for this field is :max',
             'max' => 'The maximum value for this field is :max',
-            'decimal'=> 'Only numbers are accepted for this field.'
+            'numeric'=> 'Only numbers are accepted for this field.'
         ];
     }
 }

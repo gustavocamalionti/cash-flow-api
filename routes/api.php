@@ -22,6 +22,6 @@ Route::prefix('v1')->group(function () {
     Route::apiresource('users', 'App\Http\Controllers\UsersController');
 
     Route::prefix('transactions')->group(function () {
-        Route::get('/save', [App\Http\Controllers\TransactionsController::class, 'save'])->name('transaction.make');
+        Route::POST('/make', [App\Http\Controllers\TransactionsController::class, 'makeTransaction'])->name('transaction.make');
     });
 });

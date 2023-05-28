@@ -3,6 +3,10 @@
 namespace App\Interfaces;
 
 interface ServiceInterface {
+    public function save($data);
+    public function find($id);
+    public function update($data, $id);
+    public function delete($id);
     public function getUserAuth();
     public function getParameters();
     public function QueryApplyFilters($data);
