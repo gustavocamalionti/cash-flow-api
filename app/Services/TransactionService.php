@@ -36,15 +36,17 @@ class TransactionService extends BaseService
         }
     }
 
-    public function getBalanceInAccount($id){
+    public function getBalanceInAccount($id)
+    {
         $user = $this->userRepository->findById($id);
         if ($user == null or $user == "") {
             return 0;
         }
-       return $user->balance;
+        return $user->balance;
     }
 
-    public function getAuthorization(){
+    public function getAuthorization()
+    {
         $response = Http::accept('application/json')->get('https://run.mocky.io/v3/8fafdd68-a090-496f-8c9a-3442cf30dae6')->json();
 
         if ($response['message'] == 'Autorizado') {
@@ -54,20 +56,23 @@ class TransactionService extends BaseService
         };
     }
 
-    public function addJobTransactionToQueue($data){
-        TransactionJob::dispatch($data);
+    public function addJobTransactionToQueue($data)
+    {
+        TransactionJob::dispatch($data, $this->modelRepository);
 
         return 'The transaction is being processed';
     }
 
-    public function addJobsendEmailToPayer($data) {
-        SendEmailToPayerJob::dispatch($data);
+    public function addJobsendEmailToPayer($data)
+    {
+        SendEmailToPayerJob::dispatch($data, $this->modelRepository);
 
         return 'The email to payer is being processed';
     }
 
-    public function addJobsendEmailToReceived($data) {
-        SendEmailToReceivedJob::dispatch($data);
+    public function addJobsendEmailToReceived($data)
+    {
+        SendEmailToReceivedJob::dispatch($data, $this->modelRepository);
 
         return 'The email to received is being processed';
     }
