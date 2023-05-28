@@ -28,10 +28,10 @@ class StoreUsersRequest extends FormRequest
      */
     public function rules(): array
     {
-        $type_document = $this->userService->verifyDocumentType($this->request->all()['document']);
+        $typeDocument = $this->userService->verifyDocumentType($this->request->all()['document']);
 
         return [
-            'document' => 'required|unique:users|' . $type_document,
+            'document' => 'required|unique:users|' . $typeDocument,
             'email' => 'required|unique:users',
             'balance' => 'required|numeric'
         ];

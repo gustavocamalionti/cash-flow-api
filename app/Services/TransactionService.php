@@ -7,6 +7,7 @@ use Throwable;
 use Illuminate\Bus\Batch;
 use App\Jobs\TransactionJob;
 use App\Jobs\SendEmailToPayerJob;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\Log;
 use App\Jobs\SendEmailToReceivedJob;
@@ -27,23 +28,24 @@ class TransactionService extends BaseService
         $this->userRepository = $userRepository;
     }
 
-    public function verifyDocumentType($id)
+    public function verifyDocumentType($idEspecific)
     {
-        $user = $this->userRepository->findById($id);
+        $user = $this->userRepository->findById($idEspecific);
         if ($user == null or $user == "") {
             return null;
         }
 
         if (strlen($user->document) == 14) {
             return 'cnpj';
-        } else {
-            return 'cpf';
-        }
+        } 
+
+        return 'cpf';
+        
     }
 
-    public function getBalanceInAccount($id)
+    public function getBalanceInAccount($idEspecific)
     {
-        $user = $this->userRepository->findById($id);
+        $user = $this->userRepository->findById($idEspecific);
         if ($user == null or $user == "") {
             return 0;
         }
@@ -56,9 +58,9 @@ class TransactionService extends BaseService
 
         if ($response['message'] == 'Autorizado') {
             return true;
-        } else {
-            return false;
-        };
+        } 
+
+        return false;
     }
 
 
@@ -66,8 +68,8 @@ class TransactionService extends BaseService
     public function addTransactionJobToQueue($data)
     {
         $this->data = $data;
-        $TransactionAuthorized = $this->getAuthorization();
-        if ($TransactionAuthorized == false) {
+        $transactionAuth= $this->getAuthorization();
+        if ($transactionAuth == false) {
             return response()->json([
                 'msg' => 'transaction denied.',
             ], 403);
@@ -76,15 +78,15 @@ class TransactionService extends BaseService
         Bus::batch([
             new TransactionJob($data),
 
-        ])->then(function (Batch $batch) {
+        ])->then(function () {
             // All jobs completed successfully...
 
-            $this->addEmailSendsJobToQueue();
-        })->catch(function (Batch $batch, Throwable $e) {
+            $this->addSendsJobToQueue();
+        })->catch(function () {
             return response()->json([
                 'msg' => 'An error occurred with the transaction. All balances were reverted to their respective accounts.',
             ], 403);
-        })->finally(function (Batch $batch) {
+        })->finally(function () {
             // The batch has finished executing... 
         })->dispatch();
 
@@ -98,40 +100,39 @@ class TransactionService extends BaseService
         $data['status_id'] = 1;
         $transaction = $this->modelRepository->save($data);
 
-        $this->modelRepository->beginTransaction();
+        $objectBd = new DB();
+        $objectBd::beginTransaction();
+
         // throw new Exception("Error Processing Request", 1);
 
-
-
         try {
+            //get parameters
             $payerUser = $this->userRepository->findbyId($data['sender_user_id']);
             $receivedUser = $this->userRepository->findbyId($data['receiver_user_id']);
-
             $balancePayer = $payerUser->balance - $data['amount'];
-
             $balanceReceived = $receivedUser->balance + $data['amount'];
 
-
-            Log::info($payerUser->id . ' ' . $receivedUser->id . ' ' . $transaction->id);
-            $this->userRepository->update($payerUser->id, ['balance' => $balancePayer]);
-            Log::info($payerUser->id . ' ' . $receivedUser->id . ' ' . $transaction->id);
-            $this->userRepository->update($receivedUser->id, ['balance' => $balanceReceived]);
-            Log::info($payerUser->id . ' ' . $receivedUser->id . ' ' . $transaction->id);
+            //update in user
+            $this->userRepository->update($payerUser->id, ['balance' => $balancePayer], false);
+            $this->userRepository->update($receivedUser->id, ['balance' => $balanceReceived], false);
 
             //set status to success in transaction
-            $this->modelRepository->update($transaction->id, ['status_id' => 2]);
-            Log::info($payerUser->id . ' ' . $receivedUser->id . ' ' . $transaction->id);
+            $this->modelRepository->update($transaction->id, ['status_id' => 2], false);
+            
         } catch (\Throwable $th) {
-            $this->modelRepository->rollBackTransaction();
+            $objectBd = new DB();
+            $objectBd::rollBack();  
         }
 
-
-        $this->modelRepository->commitTransaction();
+        $objectBd = new DB();
+        $objectBd::commit();
     }
 
-    public function addEmailSendsJobToQueue()
+    public function addSendsJobToQueue()
     {
-        SendEmailToPayerJob::dispatch($this->data);
-        SendEmailToReceivedJob::dispatch($this->data);
+        $objSendToPayerJob = new SendEmailToPayerJob($this->data);
+        $objSendToReceivedJob = new SendEmailToReceivedJob($this->data);
+        $objSendToPayerJob::dispatch($this->data);
+        $objSendToReceivedJob::dispatch($this->data);
     }
 }
