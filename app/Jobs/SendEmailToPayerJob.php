@@ -21,7 +21,6 @@ class SendEmailToPayerJob implements ShouldQueue
      */
     public function __construct($data)
     {
-        // Logo('construtor send');
         $this->data = $data;
     }
 
@@ -30,6 +29,6 @@ class SendEmailToPayerJob implements ShouldQueue
      */
     public function handle(): void
     {
-        // throw new Exception("Error Processing Request", 1);
+        throw new Exception("Error Processing Request", 1);
     }
 }

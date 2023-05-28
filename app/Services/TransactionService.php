@@ -69,20 +69,21 @@ class TransactionService extends BaseService
             return response()->json([
                 'msg' => 'transaction denied.',
             ], 403);
-        };
+        }; 
 
         Bus::batch([
             new TransactionJob($data),
 
         ])->then(function (Batch $batch) {
             // All jobs completed successfully...
+            $this->addEmailSendsJobToQueue();
+            
         })->catch(function (Batch $batch, Throwable $e) {
             return response()->json([
                 'msg' => 'An error occurred with the transaction. All balances were reverted to their respective accounts.',
             ], 403);
-        })->then(function (Batch $batch) {
-            // The batch has finished executing...
-            $this->addEmailSendsJobToQueue();
+        })->finally(function (Batch $batch) {
+            // The batch has finished executing... 
         })->dispatch();
 
         return 'The transaction is being processed.';

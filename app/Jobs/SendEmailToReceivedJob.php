@@ -30,6 +30,6 @@ class SendEmailToReceivedJob implements ShouldQueue
      */
     public function handle(): void
     {
-        // throw new Exception("Error Processing Request", 1);
+        throw new Exception("Error Processing Request", 1);
     }
 }
