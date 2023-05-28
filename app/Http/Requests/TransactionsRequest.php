@@ -11,7 +11,7 @@ class TransactionsRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -20,10 +20,9 @@ class TransactionsRequest extends FormRequest
      * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array|string>
      */
     public function rules(): array
-    {   
-        // Auth::user(); - comentar outras validações específicas.
+    {
         return [
-            'name' => 'required'
+            //
         ];
     }
 }

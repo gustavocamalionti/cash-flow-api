@@ -14,7 +14,23 @@ class UserService extends BaseService
         $this->modelRepository = $modelRepository;
     }
 
-    public function saveUser($data){
+    public function saveUser($data)
+    {
         return $this->modelRepository->save($data->all());
+    }
+
+    public function findUser($id)
+    {
+        return $this->modelRepository->findById($id);
+    }
+
+    public function updateUser($data, $id)
+    {
+        return $this->modelRepository->update($id, $data->all(), true);
+    }
+
+    public function deleteUser($id)
+    {
+        return $this->modelRepository->delete($id);
     }
 }
