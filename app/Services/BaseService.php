@@ -9,6 +9,27 @@ class BaseService implements ServiceInterface
 
 {
     protected $modelRepository;
+
+    public function save($data)
+    {
+        return $this->modelRepository->save($data->all());
+    }
+
+    public function find($id)
+    {
+        return $this->modelRepository->findById($id);
+    }
+
+    public function update($data, $id)
+    {
+        return $this->modelRepository->update($id, $data->all(), true);
+    }
+
+    public function delete($id)
+    {
+        return $this->modelRepository->delete($id);
+    }
+
     /**
      * Retrieve authenticated user information
      */

@@ -14,7 +14,13 @@ class UserService extends BaseService
         $this->modelRepository = $modelRepository;
     }
 
-    public function saveUser($data){
-        return $this->modelRepository->save($data->all());
+
+    public function verifyDocumentType($document)
+    {
+        if (strlen($document) == 14) {
+            return 'cnpj';
+        } else {
+            return 'cpf';
+        }
     }
 }
