@@ -29,6 +29,7 @@ class TransactionsRequest extends FormRequest
     {
         $type_document = $this->transactionService->verifyDocumentType($this->request->all()['send_user_id']);
         $max_transfer = $this->transactionService->getBalanceInAccount($this->request->all()['send_user_id']);
+        
         switch ($type_document) {
             case null:
                 //Error return: will definitely get the error does not user exist.
