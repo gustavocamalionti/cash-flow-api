@@ -58,21 +58,21 @@ class TransactionService extends BaseService
 
     public function addJobTransactionToQueue($data)
     {
-        TransactionJob::dispatch($data, $this->modelRepository);
+        TransactionJob::dispatch($data, $this->modelRepository, $this->userRepository);
 
         return 'The transaction is being processed';
     }
 
     public function addJobsendEmailToPayer($data)
     {
-        SendEmailToPayerJob::dispatch($data, $this->modelRepository);
+        SendEmailToPayerJob::dispatch($data, $this->modelRepository, $this->userRepository);
 
         return 'The email to payer is being processed';
     }
 
     public function addJobsendEmailToReceived($data)
     {
-        SendEmailToReceivedJob::dispatch($data, $this->modelRepository);
+        SendEmailToReceivedJob::dispatch($data, $this->modelRepository,  $this->userRepository);
 
         return 'The email to received is being processed';
     }
