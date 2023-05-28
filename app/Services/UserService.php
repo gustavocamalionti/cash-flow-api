@@ -19,8 +19,9 @@ class UserService extends BaseService
     {
         if (strlen($document) == 14) {
             return 'cnpj';
-        } else {
-            return 'cpf';
-        }
+        } 
+        
+        return 'cpf';
+       
     }
 }

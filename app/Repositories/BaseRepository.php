@@ -33,11 +33,10 @@ abstract class BaseRepository implements RepositoryInterface
         return $this->entity->get();
     }
 
-    public function findById($id)
+    public function findById($idEspecific)
     {
-        return $this->entity->find($id);
+        return $this->entity->find($idEspecific);
     }
-
 
     public function save(array $data)
     {
@@ -45,17 +44,17 @@ abstract class BaseRepository implements RepositoryInterface
     }
 
 
-    public function update($id, array $data, bool $typeReturn = false)
+    public function update($idEspecific, array $data, $typeReturn)
     {
-        $entity = $this->findById($id)->fill($data);
+        $entity = $this->findById($idEspecific)->fill($data);
         $returnBool = $entity->save();
 
         return (!$typeReturn ? $returnBool : $entity);
     }
 
-    public function delete($id)
+    public function delete($idEspecific)
     {
-        return $this->entity->find($id)->delete();
+        return $this->entity->find($idEspecific)->delete();
     }
 
     /**
@@ -73,15 +72,15 @@ abstract class BaseRepository implements RepositoryInterface
     {
         $filters = explode(';', $filters);
 
-        foreach ($filters as $key => $condition) {
+        foreach ($filters as $condition) {
 
-            $c = explode(':', $condition);
+            $column = explode(':', $condition);
 
             //$c[0] - column
             //$c[1] - condition
             //$c[2] - value
 
-            $this->entity = $this->entity->where($c[0], $c[1], $c[2]);
+            $this->entity = $this->entity->where($column[0], $column[1], $column[2]);
         }
     }
 
@@ -91,20 +90,5 @@ abstract class BaseRepository implements RepositoryInterface
     public function selectAttributes($attributes)
     {
         $this->entity = $this->entity->selectRaw($attributes);
-    }
-
-    public function beginTransaction(): void
-    {
-        DB::beginTransaction();
-    }
-
-    public function rollBackTransaction(): void
-    {
-        DB::rollBack();
-    }
-
-    public function commitTransaction(): void
-    {
-        DB::commit();
     }
 }

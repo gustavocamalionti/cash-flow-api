@@ -22,8 +22,8 @@ class UsersController extends Controller
     public function index(Request $request)
     {   
         try {
-            $this->userService->QueryApplyFilters($request->all());
-            $this->userService->QuerySelectAttributesEspecific($request->all());
+            $this->userService->queryApplyFilters($request);
+            $this->userService->querySelectAttributesEspecific($request);
             $response = $this->userService->getRecords();
 
             //Query is building in entity.
@@ -84,10 +84,10 @@ class UsersController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show($id)
+    public function show($idEspecific)
     {
         try {
-            $response = $this->userService->find($id);
+            $response = $this->userService->find($idEspecific);
 
             if ($response == null) {
                 return response()->json(
@@ -123,10 +123,10 @@ class UsersController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateUsersRequest $request, $id)
+    public function update(UpdateUsersRequest $request, $idEspecific)
     {
         try {
-            $user = $this->userService->find($id);
+            $user = $this->userService->find($idEspecific);
             if ($user == null) {
                 return response()->json([
                     'msg' => 'Unable to perform the update. The requested resource does not exist.'
@@ -135,7 +135,7 @@ class UsersController extends Controller
 
             /* If there is an id in the body of the request, eloquent has the intelligence to update (UPDATE) the
             record, otherwise insert(INSERT), respecting the RESTFul*/
-            $user = $this->userService->update($request->all(), $id);
+            $user = $this->userService->update($request->all(), $idEspecific);
 
             return response()->json([
                 'msg' => 'Feature updated successfully.',
@@ -163,10 +163,10 @@ class UsersController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy($id)
+    public function destroy($idEspecific)
     {
         try {
-            $user = $this->userService->find($id);
+            $user = $this->userService->find($idEspecific);
 
             if ($user == null) {
                 return response()->json([
@@ -174,7 +174,7 @@ class UsersController extends Controller
                 ], 404);
             }
 
-            $user = $this->userService->delete($id);
+            $user = $this->userService->delete($idEspecific);
 
             return response()->json([
                 'msg' => 'The feature has been successfully removed!'

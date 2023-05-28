@@ -15,19 +15,19 @@ class BaseService implements ServiceInterface
         return $this->modelRepository->save($data);
     }
 
-    public function find($id)
+    public function find($idEspecific)
     {
-        return $this->modelRepository->findById($id);
+        return $this->modelRepository->findByid($idEspecific);
     }
 
-    public function update($data, $id)
+    public function update($data, $idEspecific)
     {
-        return $this->modelRepository->update($id, $data, true);
+        return $this->modelRepository->update($idEspecific, $data, true);
     }
 
-    public function delete($id)
+    public function delete($idEspecific)
     {
-        return $this->modelRepository->delete($id);
+        return $this->modelRepository->delete($idEspecific);
     }
 
     /**
@@ -35,7 +35,9 @@ class BaseService implements ServiceInterface
      */
     public function getUserAuth()
     {
-        $user = Auth::user();
+        $objAuth = new Auth();
+
+        $user = $objAuth::user();
         return $user;
     }
 
@@ -47,26 +49,25 @@ class BaseService implements ServiceInterface
         // return $this->parametersRepository->findById(1);
     }
 
-    public function QueryApplyFilters($data)
+    public function queryApplyFilters($data)
     {
-       
         //Query is building in entity.
         if ($data->has('filter')) {
             $this->modelRepository->filter($data->filter);
         }
     }
 
-    public function QuerySelectAttributesEspecific($data){
+    public function querySelectAttributesEspecific($data){
         //Query is building in entity.
         if ($data->has('attr')) {
             $this->modelRepository->selectAttributes($data->attr);
         }
     }
 
-    public function QuerySelectRelationshipCascade($data, array $with_name_functions){
+    public function querySelectRelationshipCascade($data, array $withNameFunctions){
         // Query is building in entity.
         if (!$data->has("relationship") || $data->relationship == 'true') {
-            foreach ($with_name_functions as $key => $value) {   
+            foreach ($withNameFunctions as $value) {   
                 $this->modelRepository->displayRelationship($value);
             }
         };

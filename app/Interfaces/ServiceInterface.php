@@ -4,13 +4,13 @@ namespace App\Interfaces;
 
 interface ServiceInterface {
     public function save($data);
-    public function find($id);
-    public function update($data, $id);
-    public function delete($id);
+    public function find($idEspecific);
+    public function update($data, $idEspecific);
+    public function delete($idEspecific);
     public function getUserAuth();
     public function getParameters();
-    public function QueryApplyFilters($data);
-    public function QuerySelectAttributesEspecific($data);
-    public function QuerySelectRelationshipCascade($data, array $name_functions_relationship);
+    public function queryApplyFilters($data);
+    public function querySelectAttributesEspecific($data);
+    public function querySelectRelationshipCascade($data, array $withNameFunctions);
     public function getRecords();
 }

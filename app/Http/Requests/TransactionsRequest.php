@@ -27,30 +27,30 @@ class TransactionsRequest extends FormRequest
      */
     public function rules(): array
     {
-        $type_document = $this->transactionService->verifyDocumentType($this->request->all()['sender_user_id']);
-        $max_transfer = $this->transactionService->getBalanceInAccount($this->request->all()['sender_user_id']);
+        $typeDocument = $this->transactionService->verifyDocumentType($this->request->all()['sender_user_id']);
+        $maxTransfer = $this->transactionService->getBalanceInAccount($this->request->all()['sender_user_id']);
         
-        switch ($type_document) {
+        switch ($typeDocument) {
             case null:
                 //Error return: will definitely get the error does not user exist.
                 return [
                     'sender_user_id' => 'required|integer|exists:users,id',
                     'receiver_user_id' => 'required|integer|exists:users,id',
-                    'amount' => 'required|numeric|min:0.01|max:' . $max_transfer
+                    'amount' => 'required|numeric|min:0.01|max:' . $maxTransfer
                 ];
 
             case 'cnpj':
                 return [
                     'sender_user_id' => 'required|integer|exists:users,id|not_in:' . $this->request->all()['sender_user_id'],
                     'receiver_user_id' => 'required|integer|exists:users,id|not_in:' . $this->request->all()['sender_user_id'],
-                    'amount' => 'required|numeric|min:0.01|max:' . $max_transfer
+                    'amount' => 'required|numeric|min:0.01|max:' . $maxTransfer
                 ];
             
             case 'cpf':
                 return [
                     'sender_user_id' => 'required|integer|exists:users,id',
                     'receiver_user_id' => 'required|integer|exists:users,id|not_in:' . $this->request->all()['sender_user_id'],
-                    'amount' => 'required|numeric|min:0.01|max:' . $max_transfer
+                    'amount' => 'required|numeric|min:0.01|max:' . $maxTransfer
                 ];   
         }
     }

@@ -9,16 +9,16 @@ class CpfValidation
 
     protected function isValidate($attribute, $value)
     {
-        $c = preg_replace('/\D/', '', $value);
-        if (strlen($c) != 11 || preg_match("/^{$c[0]}{11}$/", $c)) {
+        $cpf = preg_replace('/\D/', '', $value);
+        if (strlen($cpf) != 11 || preg_match("/^{$cpf[0]}{11}$/", $cpf)) {
             return false;
         }
-        for ($s = 10, $n = 0, $i = 0; $s >= 2; $n += $c[$i++] * $s--);
-        if ($c[9] != ((($n %= 11) < 2) ? 0 : 11 - $n)) {
+        for ($s = 10, $n = 0, $i = 0; $s >= 2; $n += $cpf[$i++] * $s--);
+        if ($cpf[9] != ((($n %= 11) < 2) ? 0 : 11 - $n)) {
             return false;
         }
-        for ($s = 11, $n = 0, $i = 0; $s >= 2; $n += $c[$i++] * $s--);
-        if ($c[10] != ((($n %= 11) < 2) ? 0 : 11 - $n)) {
+        for ($s = 11, $n = 0, $i = 0; $s >= 2; $n += $cpf[$i++] * $s--);
+        if ($cpf[10] != ((($n %= 11) < 2) ? 0 : 11 - $n)) {
             return false;
         }
         return true;

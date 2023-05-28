@@ -36,10 +36,11 @@ class SendEmailToReceivedJob implements ShouldQueue
             return response()->json([
                 'msg' => $response
             ], 200);
-        } else {
-            return response()->json([
-                'msg' => 'An error occurred while sending emails.',
-            ], 503);
-        };
+        } 
+        
+        return response()->json([
+            'msg' => 'An error occurred while sending emails.',
+        ], 503);
+      
     }
 }
