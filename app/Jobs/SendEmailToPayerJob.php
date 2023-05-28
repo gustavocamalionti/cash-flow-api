@@ -5,35 +5,41 @@ namespace App\Jobs;
 use Exception;
 use Illuminate\Bus\Batchable;
 use Illuminate\Bus\Queueable;
-use Illuminate\Support\Facades\Log;
-use App\Repositories\UserRepository;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
-use App\Repositories\TransactionRepository;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
-use Illuminate\Contracts\Queue\ShouldBeUnique;
+use Illuminate\Support\Facades\Http;
 
 class SendEmailToPayerJob implements ShouldQueue
 {
     use Batchable, Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    public $tries = 3;
+    public $tries = 5;
     protected $data;
     /**
      * Create a new job instance.
      */
     public function __construct($data)
     {
-        // Logo('construtor send');
         $this->data = $data;
     }
 
     /**
      * Execute the job.
      */
-    public function handle(): void
+    public function handle()
     {
-        // throw new Exception("Error Processing Request", 1);
+        $response = Http::accept('application/json')->get('http://o4d9z.mocklab.io/notify')->json();
+        if ($response['message'] == 'Success') {
+            return response()->json([
+                'msg' => $response
+            ], 200);
+        } else {
+            return response()->json([
+                'msg' => 'An error occurred while sending emails.',
+            ], 503);
+        };
     }
+
 }

@@ -19,7 +19,7 @@ class TransactionsController extends Controller
     {
         try {
             
-            $response = $this->transactionService->chainedQueuesTransactionSendingEmails($request->all());
+            $response = $this->transactionService->addTransactionJobToQueue($request->all());
             
 
             return response()->json([
