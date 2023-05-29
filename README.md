@@ -12,14 +12,14 @@ Temos dois tipos de usuários: usuários regulares e lojista. Ambos possuem uma 
 - Eloquent ORM.
 
 ## Estruturação e Lógica
-- Routes: (Todas as rotas possuem prefixo v1, garantia de segurança se precisar de uma grande atualização.
-- Requests: Contém todas as regras de validações.
-- Controllers: (Se necessário, podemos filtrar a consulta e/ou especificar quais atributos quero de retorno).
-- Services: (Adicionei A lógica de Classes Abstratas)
-- Repositories (Adicionei A lógica de Classes Abstratas)
-- Interfaces: Interfaces aplicadas nos dois métodos abstratos.
-- Jobs: foram criados 3 Jobs para garantir uma boa performace da API (Transação, Email Pagador e Email Recebedor).
-- ACID para as transações: (Atomicidade, Consistência, Isolamento e Durabilidade.) das transações.
+- Routes | Todas as rotas possuem prefixo v1, garantia de segurança se precisar de uma grande atualização.
+- Requests | Contém todas as regras de validações.
+- Controllers | Responsável por receber parâmetros, validar, chamar os Services e retornar uma resposta. Além disso, também podemos filtrar a consulta e/ou especificar quais atributos quero de retorno.
+- Services | Responsável pelas regras de negócio.
+- Repositories | Responsável em lidar com a MODEL.
+- Interfaces | Interfaces aplicadas nos dois métodos abstratos para Service e Repositories.
+- Jobs | foram criados 3 Jobs para garantir uma boa performace da API (Transação, Email Pagador e Email Recebedor.
+- ACID para as transações | Atomicidade, Consistência, Isolamento e Durabilidade das transações.
 
 ## Arquitetura Geral - Fluxo de transação
 ![cash-flow](https://github.com/gustavocamalionti/cash-flow-api/assets/54083715/1e021c9a-1dd0-4b28-9772-9c7df9808eb2)
