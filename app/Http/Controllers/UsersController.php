@@ -1,11 +1,13 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use Illuminate\Http\Request;
 use App\Services\UserService;
 use Illuminate\Database\QueryException;
 use App\Http\Requests\StoreUsersRequest;
 use App\Http\Requests\UpdateUsersRequest;
+
 
 class UsersController extends Controller
 {
@@ -17,10 +19,24 @@ class UsersController extends Controller
     }
 
     /**
-     * Display a listing of the resource.
+     * @OA\Get(
+     *     tags={"/users/"},
+     *     path="/users/",
+     *     summary="Display a listing of users.",
+     *     @OA\Response(
+     *         response=200,
+     *         description="OK"
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Error in database or server."
+     *     )
+     * )
+     * 
+     * Display a listing of users.
      */
     public function index(Request $request)
-    {   
+    {
         try {
             $this->userService->queryApplyFilters($request);
             $this->userService->querySelectAttributesEspecific($request);
@@ -51,7 +67,54 @@ class UsersController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * @OA\Post(
+     *     tags={"/users/"},
+     *     path="/users/",
+     *     summary="Insert new user",
+     *     @OA\Parameter(
+     *         description="Description example.",
+     *         in="path",
+     *         name="name",
+     *         required=true,
+     *         @OA\Schema(type="string")
+     *     ),
+     *     @OA\Parameter(
+     *         description="Description example.",
+     *         in="path",
+     *         name="email",
+     *         required=true,
+     *         @OA\Schema(type="string")
+     *     ),
+     *     @OA\Parameter(
+     *         description="Description example.",
+     *         in="path",
+     *         name="document",
+     *         required=true,
+     *         @OA\Schema(type="integer") 
+     * ),
+     *     @OA\Parameter(
+     *         description="Description example.",
+     *         in="path",
+     *         name="balance",
+     *         required=true,
+     *     ),
+     *      @OA\Parameter(
+     *         description="Description example.",
+     *         in="path",
+     *         name="password",
+     *         required=true,
+     *         @OA\Schema(type="string")
+     * 
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="OK"
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Error in database or server."
+     *     )
+     * )
      */
     public function store(StoreUsersRequest $request)
     {
@@ -82,7 +145,26 @@ class UsersController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * @OA\Get(
+     *     tags={"/users/"},
+     *     path="/users/{id}",
+     *     summary="Get especific user",
+     *     @OA\Parameter(
+     *         description="Description example.",
+     *         in="path",
+     *         name="id",
+     *         required=true,
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="OK"
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Error in database or server."
+     *     )
+     * )
      */
     public function show($idEspecific)
     {
@@ -121,7 +203,26 @@ class UsersController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * @OA\Patch(
+     *     tags={"/users/"},
+     *     path="/users/{id}",
+     *     summary="Update information to user",
+     *     @OA\Parameter(
+     *         description="Description example.",
+     *         in="path",
+     *         name="id",
+     *         required=true,
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="OK"
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Error in database or server."
+     *     )
+     * )
      */
     public function update(UpdateUsersRequest $request, $idEspecific)
     {
@@ -161,7 +262,26 @@ class UsersController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * @OA\Delete(
+     *     tags={"/users/"},
+     *     path="/users/{id}",
+     *     summary="Get especific user",
+     *     @OA\Parameter(
+     *         description="Description example.",
+     *         in="path",
+     *         name="id",
+     *         required=true,
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="OK"
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Error in database or server."
+     *     )
+     * )
      */
     public function destroy($idEspecific)
     {

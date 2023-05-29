@@ -20,8 +20,5 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        $objValidator = new Validator();
-        $objValidator::extend('cpf', '\App\Utils\CpfValidation@validate');
-        $objValidator::extend('cnpj', '\App\Utils\CnpjValidation@validate');
     }
 }

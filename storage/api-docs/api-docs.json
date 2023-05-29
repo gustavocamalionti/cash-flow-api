@@ -1,0 +1,216 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "API | CashFlow",
+        "version": "1.0"
+    },
+    "servers": [
+        {
+            "url": "http://localhost/api/v1"
+        }
+    ],
+    "paths": {
+        "/make/": {
+            "post": {
+                "tags": [
+                    "/transactions/"
+                ],
+                "summary": "Get especific user",
+                "operationId": "9ec1bd744dd4a080974c6537c11a46c3",
+                "parameters": [
+                    {
+                        "name": "sender_user_id",
+                        "in": "path",
+                        "description": "Description example.",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "receiver_user_id",
+                        "in": "path",
+                        "description": "Description example.",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "amount",
+                        "in": "path",
+                        "description": "Description example.",
+                        "required": true,
+                        "schema": {
+                            "type": "decimal"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "500": {
+                        "description": "Error in database or server."
+                    }
+                }
+            }
+        },
+        "/users/": {
+            "get": {
+                "tags": [
+                    "/users/"
+                ],
+                "summary": "Display a listing of users.",
+                "operationId": "52759fefc8d0ec13415669461ebbd8d4",
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "500": {
+                        "description": "Error in database or server."
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "/users/"
+                ],
+                "summary": "Insert new user",
+                "operationId": "976d541f5fdbb9b7b0b10277b94effc2",
+                "parameters": [
+                    {
+                        "name": "name",
+                        "in": "path",
+                        "description": "Description example.",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "email",
+                        "in": "path",
+                        "description": "Description example.",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "document",
+                        "in": "path",
+                        "description": "Description example.",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "balance",
+                        "in": "path",
+                        "description": "Description example.",
+                        "required": true
+                    },
+                    {
+                        "name": "password",
+                        "in": "path",
+                        "description": "Description example.",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "500": {
+                        "description": "Error in database or server."
+                    }
+                }
+            }
+        },
+        "/users/{id}": {
+            "get": {
+                "tags": [
+                    "/users/"
+                ],
+                "summary": "Get especific user",
+                "operationId": "ff5f10a2275aa6fe96d9a0ef05a069ce",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Description example.",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "500": {
+                        "description": "Error in database or server."
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "/users/"
+                ],
+                "summary": "Get especific user",
+                "operationId": "f1c4cdc294934242a4db00662a78305a",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Description example.",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "500": {
+                        "description": "Error in database or server."
+                    }
+                }
+            },
+            "patch": {
+                "tags": [
+                    "/users/"
+                ],
+                "summary": "Update information to user",
+                "operationId": "27aab6068b3fbdaebce2cf24ebe30a87",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Description example.",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "500": {
+                        "description": "Error in database or server."
+                    }
+                }
+            }
+        }
+    }
+}
