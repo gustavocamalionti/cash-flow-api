@@ -19,7 +19,7 @@ class TransactionsController extends Controller
      * @OA\Post(
      *     tags={"/transactions/"},
      *     path="/make/",
-     *     summary="Get especific user",
+     *     summary="generate transaction",
      *     @OA\Parameter(
      *         description="Description example.",
      *         in="path",
