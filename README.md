@@ -1,4 +1,4 @@
-# CashFlow - Api
+# CashFlow - API
 
 Temos dois tipos de usuários: usuários regulares e lojista. Ambos possuem uma carteira com fundos. No entanto, a transferência só é permitida se o pagador não for lojista.
 
