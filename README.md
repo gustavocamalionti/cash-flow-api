@@ -1,6 +1,6 @@
 # CashFlow - Api
 
-Temos dois tipos de usuários: usuários regulares e comerciantes. Ambos possuem uma carteira com fundos e fazem transferências entre si.
+Temos dois tipos de usuários: usuários regulares e lojista. Ambos possuem uma carteira com fundos. No entanto, a transferência só é permitida se o pagador não for lojista.
 
 ## Tecnologias
 
