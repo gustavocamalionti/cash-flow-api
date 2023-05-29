@@ -15,7 +15,7 @@
                 "tags": [
                     "/transactions/"
                 ],
-                "summary": "Get especific user",
+                "summary": "generate transaction",
                 "operationId": "9ec1bd744dd4a080974c6537c11a46c3",
                 "parameters": [
                     {
@@ -163,7 +163,7 @@
                 "tags": [
                     "/users/"
                 ],
-                "summary": "Get especific user",
+                "summary": "Delete especific user",
                 "operationId": "f1c4cdc294934242a4db00662a78305a",
                 "parameters": [
                     {

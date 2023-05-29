@@ -265,7 +265,7 @@ class UsersController extends Controller
      * @OA\Delete(
      *     tags={"/users/"},
      *     path="/users/{id}",
-     *     summary="Get especific user",
+     *     summary="Delete especific user",
      *     @OA\Parameter(
      *         description="Description example.",
      *         in="path",
