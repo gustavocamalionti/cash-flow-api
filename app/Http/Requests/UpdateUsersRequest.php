@@ -22,15 +22,13 @@ class UpdateUsersRequest extends FormRequest
     public function rules(): array
     { 
         return [
-            'balance' => 'required|numeric|min:1|max:2000'
+            'balance' => 'required|numeric'
         ];
     }
 
     public function messages(){
         return [
             'required' => 'The field is required.',
-            'min' => 'The minimum value for this field is :max',
-            'max' => 'The maximum value for this field is :max',
             'numeric'=> 'Only numbers are accepted for this field.'
         ];
     }
