@@ -95,17 +95,14 @@ class TransactionService extends BaseService
 
     public function executeTransaction($data)
     {
-
-        //create transaction with status processing
-        $data['status_id'] = 1;
-        $transaction = $this->modelRepository->save($data);
-
-        $objectBd = new DB();
-        $objectBd::beginTransaction();
-
         // throw new Exception("Error Processing Request", 1);
-
         try {
+             //create transaction with status processing
+            $objectBd = new DB();
+            $objectBd::beginTransaction();
+            $data['status_id'] = 1;
+            $transaction = $this->modelRepository->save($data);
+            
             //get parameters
             $payerUser = $this->userRepository->findbyId($data['sender_user_id']);
             $receivedUser = $this->userRepository->findbyId($data['receiver_user_id']);
@@ -118,14 +115,12 @@ class TransactionService extends BaseService
 
             //set status to success in transaction
             $this->modelRepository->update($transaction->id, ['status_id' => 2], false);
-            
+             $objectBd = new DB();
+             $objectBd::commit();
         } catch (\Throwable $th) {
             $objectBd = new DB();
             $objectBd::rollBack();  
         }
-
-        $objectBd = new DB();
-        $objectBd::commit();
     }
 
     public function addSendsJobToQueue()
